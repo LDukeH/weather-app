@@ -20,6 +20,7 @@ export const getWeatherByCity = async (city: string) => {
   if (!geoData || geoData.length === 0) {
     throw new Error("City not found");
   }
+
   const { lat, lon, country } = geoData[0];
 
   const endpoint = `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=7&appid=${API_KEY}&units=metric`;

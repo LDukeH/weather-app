@@ -12,6 +12,9 @@ import useWeatherStore from "@/store/weatherStore";
 import { toast } from "react-toastify";
 import { toastOptions } from "@/utils";
 
+import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
+import { Button } from "./ui/button";
+
 export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -25,42 +28,36 @@ export default function SearchBar() {
       setWeatherData(data);
       toast.success("Weather data fetched successfully", toastOptions);
     } catch (error) {
-      toast.error("Error fetching weather data", toastOptions);
+      toast.error("Error fetching weather data: " + error, toastOptions);
     }
   };
 
-  const handleEnter = async (e: any) => {
+  const handleEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
     }
   };
 
   return (
-    <div className="flex mx-auto gap-4 w-full justify-center">
-      <label
-        htmlFor="search"
-        className="flex items-center gap-4 w-xl bg-neutral-800 h-12 px-6 rounded-xl"
-      >
-        <SearchIcon />
-        <input
-          type="text"
+    <div className="max-w-2xl flex w-full mx-auto gap-4">
+      <InputGroup>
+        {/* search icon */}
+        <InputGroupAddon>
+          <SearchIcon />
+        </InputGroupAddon>
+
+        {/* the input */}
+        <InputGroupInput
           placeholder="Search for a place..."
-          name="search"
-          className="text-white w-full focus:outline-none"
-          id="search"
           value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={handleEnter}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-          }}
         />
-      </label>
-      <button
-        onClick={handleSearch}
-        className="bg-blue-500 text-white py-2 px-6 rounded-xl h-12 cursor-pointer hover:brightness-120 transition-all duration-300 "
-      >
+      </InputGroup>
+
+      <Button onClick={handleSearch} size="xl">
         Search
-      </button>
+      </Button>
     </div>
   );
 }

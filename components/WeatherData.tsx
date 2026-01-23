@@ -2,6 +2,7 @@
 
 import useWeatherStore from "@/store/weatherStore";
 import { useEffect } from "react";
+import { Button, buttonVariants } from "./ui/button";
 
 export default function WeatherData() {
   const { weatherData } = useWeatherStore();
@@ -17,8 +18,6 @@ export default function WeatherData() {
   };
 
   const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
-
-  //
 
   useEffect(() => {
     console.log("From weatherData: ", weatherData);

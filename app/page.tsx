@@ -19,29 +19,29 @@ const dmSans = DM_Sans({
 
 export default function Home() {
   return (
-    <div className="px-28 w-full">
+    <div className="mx-auto max-w-9xl px-6 lg:px-12">
       <ToastContainer />
-      <div
-        className={`${bricolageGrotesque.className} text-white pt-12 flex justify-between items-center`}
-      >
+      {/* Header */}
+      <header className="mx-auto px-6 lg:px-12 h-16 flex items-center justify-between">
         <LogoIcon />
+        <div>Dropdown</div>
+      </header>
 
-        <div>Drop down go here</div>
-      </div>
+      <main className="mx-auto px-6 lg:px-12 space-y-16">
+        <section className="pt-16 space-y-8 text-center">
+          <h1
+            className={`${bricolageGrotesque.className} text-[3.5rem] font-bold max-w-5xl mx-auto`}
+          >
+            How’s the sky looking today?
+          </h1>
+          <SearchBar />
+        </section>
 
-      <div
-        className={`${bricolageGrotesque.className} text-white text-5.5xl mt-16 w-full flex justify-center font-bold`}
-      >
-        How's the sky looking today?
-      </div>
-
-      <div className="mt-16">
-        <SearchBar />
-      </div>
-
-      <div className="mt-12">
-        <WeatherData />
-      </div>
+        {/* Weather */}
+        <section>
+          <WeatherData />
+        </section>
+      </main>
     </div>
   );
 }
