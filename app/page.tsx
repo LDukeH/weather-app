@@ -19,15 +19,15 @@ const dmSans = DM_Sans({
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-9xl px-6 lg:px-12">
+    <div className="px-6 mx-auto max-w-9xl lg:px-12">
       <ToastContainer />
       {/* Header */}
-      <header className="mx-auto px-6 lg:px-12 h-16 flex items-center justify-between">
+      <header className="flex items-center justify-between h-16 px-6 mx-auto lg:px-12">
         <LogoIcon />
         <div>Dropdown</div>
       </header>
 
-      <main className="mx-auto px-6 lg:px-12 space-y-16">
+      <main className="px-6 mx-auto space-y-16 lg:px-12">
         <section className="pt-16 space-y-8 text-center">
           <h1
             className={`${bricolageGrotesque.className} text-[3.5rem] font-bold max-w-5xl mx-auto`}

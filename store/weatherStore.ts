@@ -1,17 +1,18 @@
 import { create } from "zustand";
+import { WeatherData } from "@/weather/weather.types";
 
 interface WeatherState {
   temperature: number;
   condition: string;
-  weatherData: any;
-  setWeatherData: (data: any) => void;
+  weatherData: WeatherData;
+  setWeatherData: (data: WeatherData) => void;
 }
 
 const useWeatherStore = create<WeatherState>((set) => ({
-  weatherData: {},
+  weatherData: {} as WeatherData,
   temperature: 0,
   condition: "",
-  setWeatherData: (data: any) => set({ weatherData: data }),
+  setWeatherData: (data: WeatherData) => set({ weatherData: data }),
 }));
 
 export default useWeatherStore;

@@ -39,7 +39,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="max-w-2xl flex w-full mx-auto gap-4">
+    <div className="flex w-full max-w-2xl gap-4 mx-auto ">
       <InputGroup>
         {/* search icon */}
         <InputGroupAddon>
