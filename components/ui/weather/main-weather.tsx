@@ -35,7 +35,7 @@ export default function MainWeather({
 
   //get weather data for current day
   const currentWeather = list[0];
-  const currentDate = new Date(currentWeather.dt * 1000);
+  const currentDate = new Date((currentWeather.dt + city.timezone) * 1000);
   const currentTemp = Math.round(currentWeather.temp.day);
 
   //get current condition and image

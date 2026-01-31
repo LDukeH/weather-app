@@ -56,3 +56,26 @@ export interface WeatherData {
   city: City;
   list: DailyWeather[];
 }
+
+export interface HourlyWeather {
+  dt: number;
+  dt_txt: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  weather: WeatherCondition[];
+  clouds: { all: number };
+  wind: { speed: number; deg: number; gust?: number };
+  pop: number;
+  sys: { pod: "d" | "n" };
+}
+
+export interface HourlyWeatherData {
+  city: City;
+  list: HourlyWeather[];
+}

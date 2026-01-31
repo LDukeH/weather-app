@@ -19,7 +19,7 @@ const dmSans = DM_Sans({
 
 export default function Home() {
   return (
-    <div className="px-6 mx-auto max-w-9xl lg:px-12">
+    <div className="px-6 mx-auto max-w-9xl lg:px-16">
       <ToastContainer />
       {/* Header */}
       <header className="flex items-center justify-between h-16 px-6 mx-auto lg:px-12">

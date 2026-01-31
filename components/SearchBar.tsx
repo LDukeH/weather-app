@@ -5,7 +5,7 @@ import React from "react";
 import SearchIcon from "@/public/assets/images/icon-search.svg";
 
 import { useState } from "react";
-import { getWeatherByCity } from "@/services/api";
+import { getHourlyWeatherByCity, getWeatherByCity } from "@/services/api";
 
 import useWeatherStore from "@/store/weatherStore";
 
@@ -18,14 +18,20 @@ import { Button } from "./ui/button";
 export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { setWeatherData } = useWeatherStore();
+  const { setWeatherData, setHourlyWeatherData } = useWeatherStore();
 
   const handleSearch = async () => {
     if (!searchQuery) return;
 
     try {
-      const data = await getWeatherByCity(searchQuery);
-      setWeatherData(data);
+      const [daily, hourly] = await Promise.all([
+        getWeatherByCity(searchQuery),
+        getHourlyWeatherByCity(searchQuery),
+      ]);
+
+      setWeatherData(daily);
+      setHourlyWeatherData(hourly);
+
       toast.success("Weather data fetched successfully", toastOptions);
     } catch (error) {
       toast.error("Error fetching weather data: " + error, toastOptions);
@@ -39,7 +45,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="flex w-full max-w-2xl gap-4 mx-auto ">
+    <div className="flex w-full max-w-2xl gap-8 mx-auto ">
       <InputGroup>
         {/* search icon */}
         <InputGroupAddon>

@@ -1,7 +1,7 @@
 // src/lib/weather-icon-map.ts
 
 export const WEATHER_IMAGE_MAP = {
-  Clear: "/assets/images/icon-sunny.webp",
+  Clear: "/assets/images/icon-partly-cloudy.webp",
 
   Clouds: "/assets/images/icon-overcast.webp",
 

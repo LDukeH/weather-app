@@ -16,7 +16,6 @@ function DailyCard({ weather }: { weather: DailyWeather }) {
   const currentCondition = weather.weather[0].main;
   const currentConditionImage =
     WEATHER_IMAGE_MAP[currentCondition as keyof typeof WEATHER_IMAGE_MAP];
-  console.log(weather);
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
@@ -26,7 +25,7 @@ function DailyCard({ weather }: { weather: DailyWeather }) {
 
   //render
   return (
-    <Card size="small" className="flex flex-col items-center py-4">
+    <Card size="small" className="flex flex-col items-center py-6">
       <CardTitle className="text-lg font-base">
         {formatDate(currentDate)}
       </CardTitle>
@@ -56,7 +55,7 @@ export default function DailyForecast({
         Daily forecast
       </header>
 
-      <section className="flex gap-4">
+      <section className="flex gap-6">
         {list.map((dailyWeather) => (
           <DailyCard key={dailyWeather.dt} weather={dailyWeather} />
         ))}

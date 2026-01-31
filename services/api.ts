@@ -33,3 +33,24 @@ export const getWeatherByCity = async (city: string) => {
     throw new Error("Error fetching weather data");
   }
 };
+
+export const getHourlyWeatherByCity = async (city: string) => {
+  const geoData = await geoCoding(city);
+  if (!geoData || geoData.length === 0) {
+    throw new Error("City not found");
+  }
+
+  const { lat, lon, country } = geoData[0];
+
+  const endpoint = `https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+  try {
+    const response = await fetch(endpoint);
+
+    const data = await response.json();
+    data.city.country = country;
+    return data;
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    throw new Error("Error fetching weather data");
+  }
+};

@@ -6,29 +6,36 @@ import { cn } from "@/lib/utils";
 function Card({
   className,
   size,
+  variant,
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof cardVariants>) {
   return (
     <div
       data-slot="card"
-      className={cn(cardVariants({ size }), className)}
+      className={cn(cardVariants({ size, variant }), className)}
       {...props}
     />
   );
 }
 
 const cardVariants = cva(
-  "bg-card text-card-foreground flex flex-col rounded-xl shadow-sm",
+  "text-card-foreground flex flex-col rounded-xl shadow-sm",
   {
     variants: {
       size: {
-        default: "rounded-xl ",
-        medium: "rounded-[12px] flex-1 min-w-[10rem]",
-        small: "rounded-[12px] min-w-[6rem]",
+        default: "rounded-xl",
+        medium: "rounded-[12px] flex-1 min-w-[10rem]  ",
+        small: "rounded-[12px] min-w-[6rem] ",
+        hourly: "rounded-[12px] min-w-[12rem]  ",
+      },
+      variant: {
+        default: "bg-card border hover:shadow-md",
+        popover: "bg-popover border hover:shadow-md",
       },
     },
     defaultVariants: {
       size: "default",
+      variant: "default",
     },
   },
 );

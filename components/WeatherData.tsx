@@ -1,11 +1,14 @@
 "use client";
 
 import useWeatherStore from "@/store/weatherStore";
-import MainWeather from "./ui/main-weather";
-import DailyForecast from "./ui/daily-forecast";
+import MainWeather from "./ui/weather/main-weather";
+import DailyForecast from "./ui/weather/daily-forecast";
+import HourlyData from "./ui/weather/hourly-forecast";
+import { useState } from "react";
 
 export default function WeatherData() {
   const { weatherData } = useWeatherStore();
+  const { hourlyWeatherData } = useWeatherStore();
 
   // rendering goes here
   if (!weatherData || !weatherData.city || !weatherData.list) {
@@ -13,7 +16,7 @@ export default function WeatherData() {
   }
 
   return (
-    <main className="flex flex-row text-white ">
+    <main className="flex flex-row gap-8 text-white">
       <section className="flex flex-col gap-8">
         <MainWeather weatherData={weatherData} />
 
@@ -22,8 +25,8 @@ export default function WeatherData() {
       </section>
 
       {/* hourly forecast goes here  */}
-      <section className="pl-4 min-w-md">
-        <div className="border-1">Hello</div>
+      <section className="min-w-md">
+        <HourlyData hourlyWeatherData={hourlyWeatherData} />
       </section>
     </main>
   );
