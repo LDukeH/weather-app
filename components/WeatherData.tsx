@@ -4,7 +4,6 @@ import useWeatherStore from "@/store/weatherStore";
 import MainWeather from "./ui/weather/main-weather";
 import DailyForecast from "./ui/weather/daily-forecast";
 import HourlyData from "./ui/weather/hourly-forecast";
-import { useState } from "react";
 
 export default function WeatherData() {
   const { weatherData } = useWeatherStore();

@@ -1,13 +1,7 @@
 //icon mapping
 import { WEATHER_IMAGE_MAP } from "@/weather/weather.map";
 import { DailyWeather, WeatherData } from "@/weather/weather.types";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
 function DailyCard({ weather }: { weather: DailyWeather }) {

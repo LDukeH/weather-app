@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 import LogoIcon from "@/public/assets/images/logo.svg";
 
 import SearchBar from "@/components/SearchBar";
@@ -9,11 +8,6 @@ import { ToastContainer } from "react-toastify";
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: "--font-bricolage-grotesque",
-  subsets: ["latin"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
@@ -27,7 +21,7 @@ export default function Home() {
         <div>Dropdown</div>
       </header>
 
-      <main className="px-6 mx-auto space-y-16 lg:px-12">
+      <main className="px-6 mx-auto space-y-12 lg:px-12">
         <section className="pt-16 space-y-8 text-center">
           <h1
             className={`${bricolageGrotesque.className} text-[3.5rem] font-bold max-w-5xl mx-auto`}

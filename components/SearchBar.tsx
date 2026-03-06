@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 
 import SearchIcon from "@/public/assets/images/icon-search.svg";
 
 import { useState } from "react";
+import { useCitySuggestions } from "@/app/hooks/useCitySuggestions";
 import { getHourlyWeatherByCity, getWeatherByCity } from "@/services/api";
 
 import useWeatherStore from "@/store/weatherStore";
@@ -14,21 +15,81 @@ import { toastOptions } from "@/utils";
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { Button } from "./ui/button";
+import { useDebounce } from "use-debounce";
+import { Item, ItemGroup } from "./ui/item";
+
+import { cn } from "@/lib/utils";
+
+import { AnimatePresence, motion } from "motion/react";
+
+// skeleton for suggestions list
+import { SuggestionSkeleton } from "./ui/skeletons/suggestion-skeleton";
+
+interface suggestion {
+  name: string;
+  country: string;
+}
+
+const SuggestionsList = ({
+  query,
+  onSelect,
+}: {
+  query: string;
+  onSelect: (city: string, country: string) => void;
+}) => {
+  const { suggestions, loading } = useCitySuggestions(query);
+  return (
+    <ItemGroup
+      className={cn(
+        "absolute top-full w-full flex flex-col gap-1 p-2 border rounded-lg bg-secondary border-border",
+        "transition-all duration-150",
+      )}
+    >
+      {loading && <SuggestionSkeleton />}
+      {!loading &&
+        suggestions.map((suggestion: suggestion, index: number) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.15, delay: index * 0.03 }}
+          >
+            <Item
+              size="md"
+              className="cursor-pointer hover:bg-popover"
+              key={index}
+              onClick={() => {
+                onSelect(suggestion.name, suggestion.country);
+              }}
+            >
+              {suggestion.name}, {suggestion.country}
+            </Item>
+          </motion.div>
+        ))}
+      {!loading && suggestions.length === 0 && (
+        <div className="p-2 text-sm text-muted-foreground">
+          No cities found.
+        </div>
+      )}
+    </ItemGroup>
+  );
+};
 
 export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debounceSearch] = useDebounce(searchQuery, 300);
 
   const { setWeatherData, setHourlyWeatherData } = useWeatherStore();
 
-  const handleSearch = async () => {
-    if (!searchQuery) return;
+  const [isFocused, setIsFocused] = useState(false);
 
+  const handleSearch = async ({ city }: { city: string }) => {
+    if (!searchQuery) return;
     try {
       const [daily, hourly] = await Promise.all([
-        getWeatherByCity(searchQuery),
-        getHourlyWeatherByCity(searchQuery),
+        getWeatherByCity(city),
+        getHourlyWeatherByCity(city),
       ]);
-
       setWeatherData(daily);
       setHourlyWeatherData(hourly);
 
@@ -40,30 +101,61 @@ export default function SearchBar() {
 
   const handleEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      handleSearch();
+      handleSearch({ city: searchQuery });
     }
   };
 
+  const handleSuggestionClick = (city: string, country: string) => {
+    setSearchQuery(`${city}, ${country}`);
+    handleSearch({ city });
+  };
+
   return (
-    <div className="flex w-full max-w-2xl gap-8 mx-auto ">
-      <InputGroup>
-        {/* search icon */}
-        <InputGroupAddon>
-          <SearchIcon />
-        </InputGroupAddon>
+    <main className="relative flex w-full max-w-2xl gap-8 mx-auto">
+      <section className="relative flex-1 ">
+        <InputGroup>
+          {/* search icon */}
+          <InputGroupAddon>
+            <SearchIcon />
+          </InputGroupAddon>
 
-        {/* the input */}
-        <InputGroupInput
-          placeholder="Search for a place..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyDown={handleEnter}
-        />
-      </InputGroup>
+          {/* the input */}
+          <InputGroupInput
+            placeholder="Search for a place..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 150)}
+            onKeyDown={handleEnter}
+          />
+        </InputGroup>
 
-      <Button onClick={handleSearch} size="xl">
+        {/* suggestions dropdown */}
+        <section className="absolute left-0 z-10 w-full mt-4 top-full">
+          {/* this project might use a bit too much library tbh */}
+          {/* AnimatePresence for animation */}
+          <AnimatePresence>
+            {isFocused && debounceSearch && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50, transition: { duration: 0.1 } }}
+              >
+                <SuggestionsList
+                  query={debounceSearch}
+                  onSelect={handleSuggestionClick}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </section>
+      </section>
+
+      <Button onClick={() => handleSearch({ city: searchQuery })} size="xl">
         Search
       </Button>
-    </div>
+    </main>
   );
 }

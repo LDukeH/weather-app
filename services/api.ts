@@ -54,3 +54,16 @@ export const getHourlyWeatherByCity = async (city: string) => {
     throw new Error("Error fetching weather data");
   }
 };
+
+export const autoSuggestCities = async (query: string) => {
+  const endpoint = `http://api.openweathermap.org/geo/1.0/direct?q=${query},&limit=${5}&appid=${API_KEY}`;
+  try {
+    const response = await fetch(endpoint);
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching city suggestions:", error);
+    throw new Error("Error fetching city suggestions");
+  }
+};
