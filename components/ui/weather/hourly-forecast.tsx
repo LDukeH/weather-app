@@ -99,7 +99,7 @@ export default function HourlyData({
       <Card size="hourly">
         <CardHeader className="px-4 pt-4 pb-2">
           <section className="flex flex-row items-center justify-between">
-            <h2 className="text-lg font-medium text-accent-foreground ">
+            <h2 className="text-lg font-semibold text-accent-foreground ">
               Hourly Forecast
             </h2>
 

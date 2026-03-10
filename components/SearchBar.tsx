@@ -30,6 +30,8 @@ interface suggestion {
   country: string;
 }
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const SuggestionsList = ({
   query,
   onSelect,
@@ -53,14 +55,14 @@ const SuggestionsList = ({
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.15, delay: index * 0.03 }}
+            onClick={() => {
+              onSelect(suggestion.name, suggestion.country);
+            }}
           >
             <Item
               size="md"
               className="cursor-pointer hover:bg-popover"
               key={index}
-              onClick={() => {
-                onSelect(suggestion.name, suggestion.country);
-              }}
             >
               {suggestion.name}, {suggestion.country}
             </Item>
@@ -79,23 +81,31 @@ export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debounceSearch] = useDebounce(searchQuery, 300);
 
-  const { setWeatherData, setHourlyWeatherData } = useWeatherStore();
+  const { setWeatherData, setHourlyWeatherData, setWeatherLoading } =
+    useWeatherStore();
 
   const [isFocused, setIsFocused] = useState(false);
 
   const handleSearch = async ({ city }: { city: string }) => {
     if (!searchQuery) return;
     try {
+      setWeatherLoading(true);
+
       const [daily, hourly] = await Promise.all([
         getWeatherByCity(city),
         getHourlyWeatherByCity(city),
       ]);
+
+      await delay(1500);
+
       setWeatherData(daily);
       setHourlyWeatherData(hourly);
 
       toast.success("Weather data fetched successfully", toastOptions);
     } catch (error) {
       toast.error("Error fetching weather data: " + error, toastOptions);
+    } finally {
+      setWeatherLoading(false);
     }
   };
 
