@@ -1,7 +1,7 @@
 const API_KEY = process.env.WEATHER_API_KEY;
 
 export const geoCoding = async (city: string) => {
-  const endpoint = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`;
+  const endpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`;
   try {
     const response = await fetch(endpoint);
 
@@ -56,7 +56,7 @@ export const getHourlyWeatherByCity = async (city: string) => {
 };
 
 export const autoSuggestCities = async (query: string) => {
-  const endpoint = `http://api.openweathermap.org/geo/1.0/direct?q=${query},&limit=${5}&appid=${API_KEY}`;
+  const endpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${query},&limit=${5}&appid=${API_KEY}`;
   try {
     const response = await fetch(endpoint);
 
