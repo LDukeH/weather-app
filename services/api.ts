@@ -1,4 +1,4 @@
-const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
+const API_KEY = process.env.WEATHER_API_KEY;
 
 export const geoCoding = async (city: string) => {
   const endpoint = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`;
