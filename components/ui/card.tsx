@@ -24,8 +24,8 @@ const cardVariants = cva(
     variants: {
       size: {
         default: "rounded-xl",
-        medium: "rounded-[12px] flex-1 min-w-[10rem]  ",
-        small: "rounded-[12px] min-w-[6rem] ",
+        medium: "rounded-[12px] flex-1",
+        small: "rounded-[12px] flex-1",
         hourly: "rounded-[12px] min-w-[12rem]  ",
       },
       variant: {

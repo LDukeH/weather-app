@@ -14,10 +14,10 @@ function LoadingDots() {
 
 export default function MainWeatherSkeleton() {
   return (
-    <section className="flex flex-col gap-8">
+    <section className="flex flex-col gap-8 ">
       {/* main weather card */}
-      <Card className="max-w-4xl text-white px-6 min-h-[242px]">
-        <CardContent className="h-full ">
+      <Card className="max-w-4xl flex justify-center text-white px-6 min-h-[242px]">
+        <CardContent className="w-full h-full">
           <section className="flex flex-col items-center justify-center h-full gap-2">
             <LoadingDots />
             <div className="text-lg font-medium">Loading...</div>
@@ -26,7 +26,7 @@ export default function MainWeatherSkeleton() {
       </Card>
 
       {/* stats skeleton */}
-      <section className="flex gap-5">
+      <section className="grid grid-cols-2 gap-4 sm:flex ">
         {status.map((stat, i) => {
           return (
             <Card size="medium" key={i} className="gap-6 p-5">

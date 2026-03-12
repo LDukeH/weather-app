@@ -19,7 +19,7 @@ function DailyCard({ weather }: { weather: DailyWeather }) {
 
   //render
   return (
-    <Card size="small" className="flex flex-col items-center py-6">
+    <Card size="small" className="flex flex-col items-center w-full gap-4 py-4">
       <CardTitle className="text-lg font-base">
         {formatDate(currentDate)}
       </CardTitle>
@@ -29,7 +29,7 @@ function DailyCard({ weather }: { weather: DailyWeather }) {
         height={50}
         width={50}
       />
-      <CardFooter className="flex justify-between w-full px-2 font-base">
+      <CardFooter className="flex justify-between w-full px-2 font-semibold">
         <p>{Math.round(weather.temp.min)}°</p>
         <p className="text-muted-foreground">{Math.round(weather.temp.max)}°</p>
       </CardFooter>
@@ -49,7 +49,7 @@ export default function DailyForecast({
         Daily forecast
       </header>
 
-      <section className="flex gap-6">
+      <section className="grid grid-cols-3 gap-2 lg:gap-6 sm:flex">
         {list.map((dailyWeather) => (
           <DailyCard key={dailyWeather.dt} weather={dailyWeather} />
         ))}

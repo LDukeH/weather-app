@@ -45,12 +45,12 @@ export default function MainWeather({
   const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 
   return (
-    <main className="flex flex-col gap-8">
-      <Card className="bg-center bg-[url('/assets/images/bg-today-large.svg')] bg-cover max-w-4xl text-white px-6">
-        <CardContent>
-          <section className="flex flex-row items-center justify-between px-2 py-14">
+    <main className="flex flex-col w-full gap-8 ">
+      <Card className="bg-center bg-[url('/assets/images/bg-today-large.svg')] bg-cover w-full  text-white px-6">
+        <CardContent className="w-full">
+          <section className="flex flex-col justify-center w-full px-2 sm:flex-row py-14 ">
             {/* city and date */}
-            <section className="flex flex-col">
+            <section className="flex flex-col items-center justify-center w-full gap-2 sm:items-start sm:gap-0">
               <div className="text-3xl font-bold">
                 {city.name}, {regionNames.of(city.country)}
               </div>
@@ -62,12 +62,13 @@ export default function MainWeather({
 
             {/* temperature and condition */}
             <section className="flex items-center justify-center gap-4">
-              <Image
-                src={currentConditionImage}
-                alt={currentCondition}
-                height={120}
-                width={120}
-              />
+              <div className="relative w-30 h-30">
+                <Image
+                  src={currentConditionImage}
+                  alt={currentCondition}
+                  fill={true}
+                />
+              </div>
               <div className="italic font-semibold text-8xl">
                 {currentTemp}°
               </div>
@@ -77,7 +78,7 @@ export default function MainWeather({
       </Card>
 
       {/* list of stats */}
-      <section className="flex gap-5">
+      <section className="grid grid-cols-2 gap-4 sm:flex ">
         <StatCard
           title="Feels like"
           value={`${Math.round(currentWeather.feels_like.day)}°C`}

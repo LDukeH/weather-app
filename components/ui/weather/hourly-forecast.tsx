@@ -71,6 +71,7 @@ export default function HourlyData({
       ),
     ),
   );
+  availableDates.pop();
 
   //use this to calculate the currently selected date's data
   //for some reason filtering shouldn't use timezone, so adding it here breaks it
@@ -80,7 +81,6 @@ export default function HourlyData({
     });
     return itemDate === currDate;
   });
-  console.log(currDateData);
 
   // set current date to first available date on load
   useEffect(() => {
@@ -93,10 +93,11 @@ export default function HourlyData({
   if (!list) {
     return null;
   }
+  console.log(currDateData);
 
   return (
-    <main>
-      <Card size="hourly">
+    <main className="w-full mx-auto ">
+      <Card className="w-full min-w-0 lg:max-w-sm" size="hourly">
         <CardHeader className="px-4 pt-4 pb-2">
           <section className="flex flex-row items-center justify-between">
             <h2 className="text-lg font-semibold text-accent-foreground ">
@@ -136,7 +137,7 @@ export default function HourlyData({
             "[&::-webkit-scrollbar-thumb]:rounded-xl [&::-webkit-scrollbar-thumb]:border-1 [&::-webkit-scrollbar-thumb]:border-[#3C3B5E]",
           )}
         >
-          <section className="flex flex-col gap-4 p-4">
+          <section className="flex flex-col gap-5 p-4 sm:gap-4">
             {currDateData.map((hourlyWeather) => (
               <HourlyCard
                 key={hourlyWeather.dt}

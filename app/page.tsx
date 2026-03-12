@@ -13,26 +13,25 @@ const bricolageGrotesque = Bricolage_Grotesque({
 
 export default function Home() {
   return (
-    <div className="px-6 mx-auto max-w-9xl lg:px-16">
+    <div className="w-full mx-auto border-blue-500">
       <ToastContainer />
+
       {/* Header */}
-      <header className="flex items-center justify-between h-16 px-6 mx-auto lg:px-12">
+      <header className="flex items-center justify-between w-full h-16 px-6 mx-auto lg:px-12">
         <LogoIcon />
-        <div>Dropdown</div>
       </header>
 
-      <main className="px-6 mx-auto space-y-12 lg:px-12">
-        <section className="pt-16 space-y-8 text-center">
-          <h1
-            className={`${bricolageGrotesque.className} text-[3.5rem] font-bold max-w-5xl mx-auto`}
-          >
+      <main className="w-full px-6 mx-auto space-y-12 lg:px-12">
+        <section className="w-full pt-16 space-y-8 text-center">
+          <h1 className=" text-6xl font-bold max-w-[22rem] sm:max-w-[28rem] lg:max-w-none mx-auto">
             How’s the sky looking today?
           </h1>
+
           <SearchBar />
         </section>
 
         {/* Weather */}
-        <section>
+        <section className="w-full mx-auto">
           <WeatherData />
         </section>
       </main>

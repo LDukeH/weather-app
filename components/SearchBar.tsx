@@ -111,6 +111,7 @@ export default function SearchBar() {
 
   const handleEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      setIsFocused(false);
       handleSearch({ city: searchQuery });
     }
   };
@@ -121,8 +122,8 @@ export default function SearchBar() {
   };
 
   return (
-    <main className="relative flex w-full max-w-2xl gap-8 mx-auto">
-      <section className="relative flex-1 ">
+    <main className="relative flex flex-col w-full gap-4 mx-auto sm:gap-6 sm:flex-row lg:max-w-2xl ">
+      <section className="relative flex-1 min-w-0">
         <InputGroup>
           {/* search icon */}
           <InputGroupAddon>
@@ -163,7 +164,11 @@ export default function SearchBar() {
         </section>
       </section>
 
-      <Button onClick={() => handleSearch({ city: searchQuery })} size="xl">
+      <Button
+        onClick={() => handleSearch({ city: searchQuery })}
+        size="xl"
+        className="w-full sm:w-auto"
+      >
         Search
       </Button>
     </main>

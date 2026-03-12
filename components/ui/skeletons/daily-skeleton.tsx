@@ -13,7 +13,7 @@ export default function DailySkeleton() {
       <header className="text-xl font-medium text-accent-foreground">
         Daily forecast
       </header>
-      <section className="flex gap-6">
+      <section className="grid grid-cols-3 gap-2 lg:gap-6 sm:flex">
         {Array.from({ length: 7 }).map((_, i) => (
           <DailyCardSkeleton key={i} />
         ))}
