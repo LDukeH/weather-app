@@ -1,69 +1,29 @@
-const API_KEY = process.env.WEATHER_API_KEY;
-
-export const geoCoding = async (city: string) => {
-  const endpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`;
-  try {
-    const response = await fetch(endpoint);
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching geocoding data:", error);
-    throw error;
-  }
-};
-
 export const getWeatherByCity = async (city: string) => {
-  const geoData = await geoCoding(city);
-  if (!geoData || geoData.length === 0) {
-    throw new Error("City not found");
+  const res = await fetch(`/api/weather/forecast?city=${city}`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch weather");
   }
 
-  const { lat, lon, country } = geoData[0];
-
-  const endpoint = `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=7&appid=${API_KEY}&units=metric`;
-  try {
-    const response = await fetch(endpoint);
-
-    const data = await response.json();
-    data.city.country = country;
-    return data;
-  } catch (error) {
-    console.error("Error fetching weather data:", error);
-    throw new Error("Error fetching weather data");
-  }
+  return res.json();
 };
 
 export const getHourlyWeatherByCity = async (city: string) => {
-  const geoData = await geoCoding(city);
-  if (!geoData || geoData.length === 0) {
-    throw new Error("City not found");
+  const res = await fetch(`/api/weather/hourly?city=${city}`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch hourly weather");
   }
 
-  const { lat, lon, country } = geoData[0];
-
-  const endpoint = `https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
-  try {
-    const response = await fetch(endpoint);
-
-    const data = await response.json();
-    data.city.country = country;
-    return data;
-  } catch (error) {
-    console.error("Error fetching weather data:", error);
-    throw new Error("Error fetching weather data");
-  }
+  return res.json();
 };
 
-export const autoSuggestCities = async (query: string) => {
-  const endpoint = `https://api.openweathermap.org/geo/1.0/direct?q=${query},&limit=${5}&appid=${API_KEY}`;
-  try {
-    const response = await fetch(endpoint);
+export const getSuggestions = async (query: string) => {
+  const res = await fetch(`/api/weather/suggest?query=${query}`);
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching city suggestions:", error);
-    throw new Error("Error fetching city suggestions");
+  if (!res.ok) {
+    throw new Error("Failed to fetch suggestions");
   }
+
+  return res.json();
 };
