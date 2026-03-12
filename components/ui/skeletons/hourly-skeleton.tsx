@@ -18,7 +18,7 @@ export default function HourlySkeleton() {
             {/* dropdown skeleton */}
             <Button variant="popover">
               <div className="flex flex-row items-center justify-center gap-2 px-1">
-                --
+                –
                 <DropDownIcon className="pt-1" />
               </div>
             </Button>

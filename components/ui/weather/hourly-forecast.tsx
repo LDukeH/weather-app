@@ -93,7 +93,6 @@ export default function HourlyData({
   if (!list) {
     return null;
   }
-  console.log(currDateData);
 
   return (
     <main className="w-full mx-auto ">
