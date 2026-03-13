@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React from "react";
 
 import SearchIcon from "@/public/assets/images/icon-search.svg";
 
@@ -127,7 +127,9 @@ export default function SearchBar() {
         <InputGroup>
           {/* search icon */}
           <InputGroupAddon>
-            <SearchIcon />
+            <div>
+              <SearchIcon />
+            </div>
           </InputGroupAddon>
 
           {/* the input */}
