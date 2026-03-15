@@ -14,7 +14,6 @@ export default function WeatherData() {
   }
   // rendering goes here
   if (!weatherData || !weatherData.current || !hourlyWeatherData) {
-    toast.error("Error fetching data");
     return <div></div>;
   }
 
