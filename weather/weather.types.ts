@@ -1,81 +1,143 @@
-export interface DailyWeather {
-  dt: number;
-  sunrise: number;
-  sunset: number;
+export interface OpenMeteoWeatherData {
+  latitude: number;
+  longitude: number;
+  elevation: number;
 
-  temp: {
-    day: number;
-    min: number;
-    max: number;
-    night: number;
-    eve: number;
-    morn: number;
-  };
+  generationtime_ms: number;
 
-  feels_like: {
-    day: number;
-    night: number;
-    eve: number;
-    morn: number;
-  };
+  timezone: string;
+  timezone_abbreviation: string;
+  utc_offset_seconds: number;
 
-  pressure: number;
-  humidity: number;
+  current: OpenMeteoCurrent;
+  current_units: OpenMeteoCurrentUnits;
 
-  speed: number; // wind speed
-  deg: number; // wind direction
-  gust: number; // wind gust
+  hourly: OpenMeteoHourly;
+  hourly_units: OpenMeteoHourlyUnits;
 
-  clouds: number;
-  pop: number; // probability of precipitation
+  daily: OpenMeteoDaily;
+  daily_units: OpenMeteoDailyUnits;
 
-  weather: WeatherCondition[];
+  city: WeatherCity;
 }
 
-export interface WeatherCondition {
-  id: number;
-  main: string;
-  description: string;
-  icon: string;
+export interface OpenMeteoCurrent {
+  time: string;
+
+  temperature_2m: number;
+  apparent_temperature: number;
+
+  relative_humidity_2m: number;
+
+  wind_speed_10m: number;
+
+  precipitation: number;
+
+  weather_code: number;
+
+  interval: number;
 }
 
-export interface City {
-  id: number;
+export interface OpenMeteoCurrentUnits {
+  time: string;
+
+  temperature_2m: string;
+  apparent_temperature: string;
+
+  relative_humidity_2m: string;
+
+  wind_speed_10m: string;
+
+  precipitation: string;
+
+  weather_code: string;
+
+  interval: string;
+}
+
+export interface OpenMeteoHourly {
+  latitude: number;
+  longitude: number;
+  elevation: number;
+
+  generationtime_ms: number;
+
+  utc_offset_seconds: number;
+  timezone: string;
+  timezone_abbreviation: string;
+
+  hourly: {
+    time: string[];
+    temperature_2m: number[];
+    apparent_temperature: number[];
+    relative_humidity_2m: number[];
+    precipitation_probability: number[];
+    wind_speed_10m: number[];
+    weather_code: number[];
+  };
+
+  hourly_units: {
+    time: string;
+    temperature_2m: string;
+    apparent_temperature: string;
+    relative_humidity_2m: string;
+    precipitation_probability: string;
+    wind_speed_10m: string;
+    weather_code: string;
+  };
+}
+export interface OpenMeteoHourlyUnits {
+  time: string;
+
+  temperature_2m: string;
+
+  apparent_temperature: string;
+
+  relative_humidity_2m: string;
+
+  precipitation_probability: string;
+
+  wind_speed_10m: string;
+}
+
+export interface OpenMeteoDaily {
+  time: string[];
+
+  temperature_2m_max: number[];
+
+  temperature_2m_min: number[];
+
+  precipitation_probability_max: number[];
+
+  weather_code: number[];
+}
+
+export interface OpenMeteoDailyUnits {
+  time: string;
+
+  temperature_2m_max: string;
+
+  temperature_2m_min: string;
+
+  precipitation_probability_max: string;
+}
+
+export interface WeatherCity {
   name: string;
   country: string;
-  population: number;
-  timezone: number; // seconds from UTC
-
-  coord: {
-    lon: number;
-    lat: number;
-  };
+  lat: number;
+  lon: number;
 }
 
-export interface WeatherData {
-  city: City;
-  list: DailyWeather[];
+export interface DailyWeather {
+  time: string;
+  weather_code: number;
+  tempMax: number;
+  tempMin: number;
 }
 
 export interface HourlyWeather {
-  dt: number;
-  dt_txt: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    temp_min: number;
-    temp_max: number;
-    pressure: number;
-    humidity: number;
-  };
-  weather: WeatherCondition[];
-  clouds: { all: number };
-  wind: { speed: number; deg: number; gust?: number };
-  pop: number;
-  sys: { pod: "d" | "n" };
-}
-
-export interface HourlyWeatherData {
-  city: City;
-  list: HourlyWeather[];
+  time: string;
+  apparent_temperature: number;
+  weather_code: number;
 }

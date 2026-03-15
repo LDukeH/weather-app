@@ -12,14 +12,16 @@ export async function GET(req: Request) {
     return Response.json({ error: "City not found" }, { status: 404 });
   }
 
-  const { lat, lon, country } = geoData[0];
+  const { lat, lon } = geoData[0];
 
-  const endpoint = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+  const endpoint = `https://api.open-meteo.com/v1/forecast
+?latitude=${lat}
+&longitude=${lon}
+&hourly=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation_probability,wind_speed_10m,weather_code
+&timezone=auto`;
 
   const res = await fetch(endpoint);
   const data = await res.json();
-
-  data.city.country = country;
 
   return Response.json(data);
 }

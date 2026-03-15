@@ -40,6 +40,7 @@ const SuggestionsList = ({
   onSelect: (city: string, country: string) => void;
 }) => {
   const { suggestions, loading } = useCitySuggestions(query);
+
   return (
     <ItemGroup
       className={cn(
@@ -95,8 +96,6 @@ export default function SearchBar() {
         getWeatherByCity(city),
         getHourlyWeatherByCity(city),
       ]);
-
-      await delay(1500);
 
       setWeatherData(daily);
       setHourlyWeatherData(hourly);

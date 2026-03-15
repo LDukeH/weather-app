@@ -10,27 +10,22 @@ import { useEffect, useState } from "react";
 
 import DropDownIcon from "@/public/assets/images/icon-dropdown.svg";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { HourlyWeatherData, HourlyWeather } from "@/weather/weather.types";
+import { OpenMeteoHourly, HourlyWeather } from "@/weather/weather.types";
 import Image from "next/image";
 
 //icon mapping
-import { WEATHER_IMAGE_MAP } from "@/weather/weather.map";
+import { WEATHER_IMAGE_MAP, mapWeatherCode } from "@/weather/weather.map";
 import { cn } from "@/lib/utils";
+import { data } from "motion/react-client";
 
 //hourly forecast component
-function HourlyCard({
-  hourlyWeather,
-  timezone,
-}: {
-  hourlyWeather: HourlyWeather;
-  timezone: number;
-}) {
+function HourlyCard({ hourlyWeather }: { hourlyWeather: HourlyWeather }) {
   //icon mapping
-  const currentCondition = hourlyWeather.weather[0].main;
+  const currentCondition = mapWeatherCode(hourlyWeather.weather_code);
   const currentConditionImage =
     WEATHER_IMAGE_MAP[currentCondition as keyof typeof WEATHER_IMAGE_MAP];
 
-  const date = new Date((hourlyWeather.dt + timezone) * 1000);
+  const date = new Date(hourlyWeather.time);
   const formattedHour = new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
     hour12: true,
@@ -54,35 +49,40 @@ function HourlyCard({
   );
 }
 
+const formatHourlyWeather = (data: OpenMeteoHourly) => {
+  const { time, apparent_temperature, weather_code } = data.hourly;
+
+  return time.map((date, i) => ({
+    time: date,
+    apparent_temperature: apparent_temperature[i],
+    weather_code: weather_code[i],
+  }));
+};
+
 export default function HourlyData({
   hourlyWeatherData,
 }: {
-  hourlyWeatherData: HourlyWeatherData;
+  hourlyWeatherData: OpenMeteoHourly;
 }) {
+  const hourlyData = formatHourlyWeather(hourlyWeatherData);
+
   const [currDate, setCurrDate] = useState<string | null>(null);
-  const { list } = hourlyWeatherData || {};
-  const timezone = hourlyWeatherData.city.timezone || 0;
-  const availableDates = Array.from(
-    new Set(
-      list.map((item) =>
-        new Date((item.dt + timezone) * 1000).toLocaleDateString("en-US", {
-          weekday: "long",
-        }),
-      ),
-    ),
-  );
+  const availableDates = hourlyData
+    .filter((_, i) => i % 24 === 0)
+    .map((item) =>
+      new Date(item.time).toLocaleDateString("en-US", { weekday: "long" }),
+    );
   availableDates.pop();
 
   //use this to calculate the currently selected date's data
   //for some reason filtering shouldn't use timezone, so adding it here breaks it
-  const currDateData = list.filter((item) => {
-    const itemDate = new Date(item.dt * 1000).toLocaleDateString("en-US", {
+  const currDateData = hourlyData.filter((item) => {
+    const itemDate = new Date(item.time).toLocaleDateString("en-US", {
       weekday: "long",
     });
     return itemDate === currDate;
   });
 
-  // set current date to first available date on load
   useEffect(() => {
     if (!currDate && availableDates.length > 0) {
       setCurrDate(availableDates[0]);
@@ -90,7 +90,7 @@ export default function HourlyData({
   }, [availableDates, currDate]);
 
   //this shouldn't render if there's no current data so uh yeah
-  if (!list) {
+  if (!hourlyData) {
     return null;
   }
 
@@ -137,12 +137,8 @@ export default function HourlyData({
           )}
         >
           <section className="flex flex-col gap-5 p-4 sm:gap-4">
-            {currDateData.map((hourlyWeather) => (
-              <HourlyCard
-                key={hourlyWeather.dt}
-                hourlyWeather={hourlyWeather}
-                timezone={timezone}
-              />
+            {currDateData.map((hourlyData) => (
+              <HourlyCard key={hourlyData.time} hourlyWeather={hourlyData} />
             ))}
           </section>
         </CardContent>

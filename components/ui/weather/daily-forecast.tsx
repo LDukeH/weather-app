@@ -1,13 +1,13 @@
 //icon mapping
-import { WEATHER_IMAGE_MAP } from "@/weather/weather.map";
-import { DailyWeather, WeatherData } from "@/weather/weather.types";
+import { WEATHER_IMAGE_MAP, mapWeatherCode } from "@/weather/weather.map";
+import { DailyWeather, OpenMeteoWeatherData } from "@/weather/weather.types";
 import { Card, CardFooter, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
 function DailyCard({ weather }: { weather: DailyWeather }) {
   //data formatting
-  const currentDate = new Date(weather.dt * 1000);
-  const currentCondition = weather.weather[0].main;
+  const currentDate = new Date(weather.time);
+  const currentCondition = mapWeatherCode(weather.weather_code);
   const currentConditionImage =
     WEATHER_IMAGE_MAP[currentCondition as keyof typeof WEATHER_IMAGE_MAP];
 
@@ -30,19 +30,32 @@ function DailyCard({ weather }: { weather: DailyWeather }) {
         width={50}
       />
       <CardFooter className="flex justify-between w-full px-2 font-semibold">
-        <p>{Math.round(weather.temp.min)}°</p>
-        <p className="text-muted-foreground">{Math.round(weather.temp.max)}°</p>
+        <p>{Math.round(weather.tempMin)}°</p>
+        <p className="text-muted-foreground">{Math.round(weather.tempMax)}°</p>
       </CardFooter>
     </Card>
   );
 }
 
+const formatDailyWeather = (data: OpenMeteoWeatherData) => {
+  const { time, weather_code, temperature_2m_max, temperature_2m_min } =
+    data.daily;
+
+  return time.map((date, i) => ({
+    time: date,
+    weather_code: weather_code[i],
+    tempMax: temperature_2m_max[i],
+    tempMin: temperature_2m_min[i],
+  }));
+};
+
 export default function DailyForecast({
   weatherData,
 }: {
-  weatherData: WeatherData;
+  weatherData: OpenMeteoWeatherData;
 }) {
-  const { list } = weatherData;
+  console.log(weatherData);
+  const daily = formatDailyWeather(weatherData);
   return (
     <main className="flex flex-col gap-5">
       <header className="text-xl font-medium text-accent-foreground">
@@ -50,8 +63,8 @@ export default function DailyForecast({
       </header>
 
       <section className="grid grid-cols-3 gap-2 lg:gap-6 sm:flex">
-        {list.map((dailyWeather) => (
-          <DailyCard key={dailyWeather.dt} weather={dailyWeather} />
+        {daily.map((dailyWeather) => (
+          <DailyCard key={dailyWeather.time} weather={dailyWeather} />
         ))}
       </section>
     </main>

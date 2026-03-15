@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WeatherData } from "@/weather/weather.types";
+import { OpenMeteoWeatherData } from "@/weather/weather.types";
 import Image from "next/image";
 
 //icon mapping
-import { WEATHER_IMAGE_MAP } from "@/weather/weather.map";
+import { WEATHER_IMAGE_MAP, mapWeatherCode } from "@/weather/weather.map";
 
 function StatCard({ title, value }: { title: string; value: string }) {
   return (
@@ -19,7 +19,7 @@ function StatCard({ title, value }: { title: string; value: string }) {
 export default function MainWeather({
   weatherData,
 }: {
-  weatherData: WeatherData;
+  weatherData: OpenMeteoWeatherData;
 }) {
   //   use these to format
   const formatDate = (date: Date) => {
@@ -31,16 +31,19 @@ export default function MainWeather({
     });
   };
 
-  const { city, list } = weatherData;
-
   //get weather data for current day
-  const currentWeather = list[0];
-  console.log(currentWeather);
-  const currentDate = new Date((currentWeather.dt + city.timezone) * 1000);
-  const currentTemp = Math.round(currentWeather.temp.max);
+  console.log(weatherData);
+  const currentWeather = weatherData.current;
+  const city = weatherData.city;
 
+  if (!currentWeather) return;
+
+  const currentDate = new Date(currentWeather?.time);
+  const currentTemp = Math.round(currentWeather?.temperature_2m);
+
+  console.log(currentDate, currentTemp);
   //get current condition and image
-  const currentCondition = currentWeather.weather[0].main;
+  const currentCondition = mapWeatherCode(currentWeather?.weather_code);
   const currentConditionImage =
     WEATHER_IMAGE_MAP[currentCondition as keyof typeof WEATHER_IMAGE_MAP];
   const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
@@ -82,16 +85,19 @@ export default function MainWeather({
       <section className="grid grid-cols-2 gap-4 sm:flex ">
         <StatCard
           title="Feels like"
-          value={`${Math.round(currentWeather.feels_like.day)}°C`}
+          value={`${Math.round(currentWeather.apparent_temperature)}°C`}
         />
-        <StatCard title="Humidity" value={`${currentWeather.humidity}%`} />
+        <StatCard
+          title="Humidity"
+          value={`${currentWeather.relative_humidity_2m}%`}
+        />
         <StatCard
           title="Wind Speed"
-          value={`${Math.round(currentWeather.speed * 3.6)} km/h`}
+          value={`${Math.round(currentWeather.wind_speed_10m)} km/h`}
         />
         <StatCard
           title="Precipitation"
-          value={`${Math.round(currentWeather.pop * 100)} mm`}
+          value={`${Math.round(currentWeather.precipitation * 100)} mm`}
         />
       </section>
     </main>

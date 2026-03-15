@@ -4,19 +4,17 @@ import useWeatherStore from "@/store/weatherStore";
 import MainWeather from "./ui/weather/main-weather";
 import DailyForecast from "./ui/weather/daily-forecast";
 import HourlyData from "./ui/weather/hourly-forecast";
-import HourlySkeleton from "./ui/skeletons/hourly-skeleton";
-import MainWeatherSkeleton from "./ui/skeletons/main-weather-skeleton";
 import WeatherSkeleton from "./ui/skeletons/weather-skeleton";
-import DailySkeleton from "./ui/skeletons/daily-skeleton";
+import { toast } from "react-toastify";
 
 export default function WeatherData() {
   const { weatherData, hourlyWeatherData, weatherLoading } = useWeatherStore();
-
   if (weatherLoading) {
     return <WeatherSkeleton />;
   }
   // rendering goes here
-  if (!weatherData || !weatherData.city || !weatherData.list) {
+  if (!weatherData || !weatherData.current || !hourlyWeatherData) {
+    toast.error("Error fetching data");
     return <div></div>;
   }
 

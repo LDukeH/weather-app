@@ -1,29 +1,55 @@
 import { create } from "zustand";
-import { WeatherData, HourlyWeatherData } from "@/weather/weather.types";
+import { OpenMeteoWeatherData, OpenMeteoHourly } from "@/weather/weather.types";
 
 interface WeatherState {
+  weatherData: OpenMeteoWeatherData | null;
+  hourlyWeatherData: OpenMeteoHourly | null;
+
   temperature: number;
-  condition: string;
-  weatherData: WeatherData;
-  hourlyWeatherData: HourlyWeatherData;
+  conditionCode: number;
+
   weatherLoading: boolean;
   hourlyLoading: boolean;
-  setWeatherData: (data: WeatherData) => void;
-  setHourlyWeatherData: (data: HourlyWeatherData) => void;
-  setWeatherLoading: (data: boolean) => void;
+
+  setWeatherData: (data: OpenMeteoWeatherData) => void;
+  setHourlyWeatherData: (data: OpenMeteoHourly) => void;
+
+  setTemperature: (temp: number) => void;
+  setConditionCode: (code: number) => void;
+
+  setWeatherLoading: (loading: boolean) => void;
+  setHourlyLoading: (loading: boolean) => void;
 }
 
 const useWeatherStore = create<WeatherState>((set) => ({
-  weatherData: {} as WeatherData,
-  hourlyWeatherData: {} as HourlyWeatherData,
+  weatherData: null,
+  hourlyWeatherData: null,
+
   temperature: 0,
-  condition: "",
+  conditionCode: 0,
+
   weatherLoading: false,
   hourlyLoading: false,
-  setWeatherData: (data: WeatherData) => set({ weatherData: data }),
-  setHourlyWeatherData: (data: HourlyWeatherData) =>
-    set({ hourlyWeatherData: data }),
-  setWeatherLoading: (data: boolean) => set({ weatherLoading: data }),
+
+  setWeatherData: (data) =>
+    set({
+      weatherData: data,
+      temperature: data.current?.temperature_2m ?? 0,
+      conditionCode: data.current?.weather_code ?? 0,
+    }),
+
+  setHourlyWeatherData: (data) =>
+    set({
+      hourlyWeatherData: data,
+    }),
+
+  setTemperature: (temp) => set({ temperature: temp }),
+
+  setConditionCode: (code) => set({ conditionCode: code }),
+
+  setWeatherLoading: (loading) => set({ weatherLoading: loading }),
+
+  setHourlyLoading: (loading) => set({ hourlyLoading: loading }),
 }));
 
 export default useWeatherStore;
